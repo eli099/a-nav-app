@@ -43,9 +43,27 @@ app.get('/users', (req, res, next) => {
   return res.json(users)
 })
 
+// Find one user (by ID)
+app.get('/users/:id', (req, res, next) => {
+  const { id } = req.params
+  const user = users.find((user) => user.id === id)
+  res.status(200).json(user)
+})
+
 // Add post request
 app.post('/user', (req, res, next) => {
   const { body: newUser } = req
+
+  if (!newUser.name || !newUser.location) {
+    return res
+      .status(400)
+      .json({ message: "Please provide name and location of new user." })
+  }
+
+  // Add unique ID to new user
+  newUser.id = uuid()
+  newUser.createdAt = new Date()
+
   users.push(newUser)
   console.log(users)
   return res.end(`User with name ${req.body.name} has been added.`)
