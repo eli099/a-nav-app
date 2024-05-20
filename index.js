@@ -1,5 +1,7 @@
 import express from 'express'
 
+import { v4 as uuid } from 'uuid'
+
 // console.log('Hello World!')
 const PORT = 5000
 
@@ -17,10 +19,10 @@ const handleNotFound = (req, res, next) => {
 app.listen(PORT, () => console.log(`Express app is running on ${PORT}`))
 
 // Mock Database
-const dogs = [
-  { name: 'Rodney', age: 12 },
-  { name: 'Dolly', age: 9 },
-  { name: 'Monty', age: 5 }
+const users = [
+  { name: 'Rodney', location: 'UK' },
+  { name: 'Dolly', location: 'USA' },
+  { name: 'Monty', location: 'Japan' }
 ]
 
 const logger = (req, res, next) => {
@@ -37,8 +39,19 @@ app.use(logger)
 // Check get request is '/'
 app.get('/', handleRouteRequest)
 
+app.get('/users', (req, res, next) => {
+  return res.json(users)
+})
+
+// Add post request
+app.post('/user', (req, res, next) => {
+  const { body: newUser } = req
+  users.push(newUser)
+  console.log(users)
+  return res.end(`User with name ${req.body.name} has been added.`)
+})
+
 // If not return handleNotFound
 app.use(handleNotFound)
-
 
 console.log({ app })
