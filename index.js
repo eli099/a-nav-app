@@ -4,6 +4,16 @@ import express from 'express'
 const PORT = 5000
 
 const app = express()
+
+// Create endpoint
+const handleRouteRequest = (req, res, next) => {
+  return res.end('Welcome to our root endpoint of the API')
+}
+
+const handleNotFound = (req, res, next) => {
+  return res.status(404).end('Not Found')
+}
+
 app.listen(PORT, () => console.log(`Express app is running on ${PORT}`))
 
 // Mock Database
@@ -19,15 +29,16 @@ const logger = (req, res, next) => {
   next()
 }
 
-app.use(logger)
-
 // Parse body into JSON
 app.use(express.json())
 
-// Create endpoint
-app.use((req, res, next) => {
-  res.end('Welcome to our API!')
-})
+app.use(logger)
+
+// Check get request is '/'
+app.get('/', handleRouteRequest)
+
+// If not return handleNotFound
+app.use(handleNotFound)
 
 
 console.log({ app })
