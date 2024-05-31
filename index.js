@@ -31,27 +31,4 @@ const logger = (req, res, next) => {
   next()
 }
 
-// Parse body into JSON
-app.use(express.json())
-
-app.use(logger)
-
-// Check get request is '/'
-app.get('/', handleRouteRequest)
-
-app.get('/users', (req, res, next) => {
-  return res.json(users)
-})
-
-// Add post request
-app.post('/user', (req, res, next) => {
-  const { body: newUser } = req
-  users.push(newUser)
-  console.log(users)
-  return res.end(`User with name ${req.body.name} has been added.`)
-})
-
-// If not return handleNotFound
-app.use(handleNotFound)
-
-console.log({ app })
+console.log(logger)
